@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    active: test
+
+logging:
+  level:
+    dev.aquashdw.jpa.aspect: trace
+
+custom:
+  property:
+    single: custom-property
+    comlist: comma,separated,list,to,value
+    ymllist:
+      - yaml
+      - list
+      - to
+      - spring
+      - value

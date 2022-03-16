@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Occupation</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="profile: ${profiles}">
+            <td th:text="${profile.name}"/>
+            <td th:text="${profile.age}"/>
+            <td th:text="${profile.occupation}"/>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.aquashdw.mybatis.mapper.PostMapper">
+    <insert id="createPost" parameterType="dev.aquashdw.mybatis.dto.PostDto">
+        insert into POST(title, content, writer, board)
+        values (#{title}, #{content}, #{writer}, ${board})
+    </insert>
+    <insert id="createPostAll"
+            parameterType="dev.aquashdw.mybatis.dto.PostDto">
+        insert into POST(title, content, writer, board)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.title}, #{item.content}, #{item.writer}, ${item.board})
+        </foreach>
+    </insert>
+    <select
+            id="readPost"
+            parameterType="int"
+            resultType="dev.aquashdw.mybatis.dto.PostDto">
+        select * from post where id = ${id}
+    </select>
+    <select id="readPostAll" resultType="dev.aquashdw.mybatis.dto.PostDto">
+        select * from post
+    </select>
+    <select
+            id="readPostQuery"
+            parameterType="dev.aquashdw.mybatis.dto.PostDto"
+            resultType="dev.aquashdw.mybatis.dto.PostDto">
+        select * from post
+        where title = #{title}
+        <if test="writer != null">
+            and writer = #{writer}
+        </if>
+    </select>
+    <update id="updatePost" parameterType="dev.aquashdw.mybatis.dto.PostDto">
+        update post
+        set
+            title = #{title},
+            content = #{content},
+            writer = #{writer},
+            board = ${board}
+        where id = ${id}
+    </update>
+    <delete id="deletePost" parameterType="int">
+        delete from post where id = ${id}
+    </delete>
+</mapper>
