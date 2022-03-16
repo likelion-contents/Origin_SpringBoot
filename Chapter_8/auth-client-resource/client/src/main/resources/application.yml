@@ -1,0 +1,28 @@
+
+server:
+  port: 9080
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          likelion-oidc:
+            provider: likelion
+            client-id: likelion-client
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:9080/login/oauth2/code/{registrationId}"
+            scope: openid
+            client-name: likelion-oidc
+          likelion-auth-code:
+            provider: likelion
+            client-id: likelion-client
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://127.0.0.1:9080/authorized"
+            scope: read
+            client-name: likelion-auth-code
+        provider:
+          likelion:
+            issuer-uri: http://localhost:10000
