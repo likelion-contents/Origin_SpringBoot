@@ -1,0 +1,66 @@
+<html>
+<head>
+    <title>Websocket Chatting</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="/js/stomp.js"></script>
+    <script type="text/javascript">
+        let stompClient = null;
+        const pathname = window.location.pathname;
+        const roomId = pathname.split("/")[2];
+        const nickname = pathname.split("/")[3];
+
+        function getRoomName() {
+            fetch(`/chat/room/name?room-id=${roomId}`, {
+                method: "GET"
+            }).then((response) => {
+                response.json().then((responseBody) => {
+                    console.log(responseBody);
+                    document.getElementById('room-name').innerHTML = responseBody.roomName;
+                })
+            });
+        }
+
+        function connect() {
+            getRoomName();
+            let socket = new SockJS('/ws/chat');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function(frame) {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe(`/receive-endpoint/${roomId}`, function(message) {
+                    showMessageOutput(JSON.parse(message.body));
+                });
+            });
+        }
+
+        function sendMessage() {
+            let message = document.getElementById('message').value;
+            stompClient.send("/send-endpoint/ws/chat", {},
+                JSON.stringify({
+                    'roomId': roomId,
+                    'sender': nickname,
+                    'message': message
+                }));
+        }
+
+        function showMessageOutput(messageOutput) {
+            let response = document.getElementById('response');
+            let p = document.createElement('p');
+            p.style.wordWrap = 'break-word';
+            p.appendChild(document.createTextNode(messageOutput.sender + ": "
+                + messageOutput.message + " (" + messageOutput.time + ")"));
+            response.appendChild(p);
+        }
+    </script>
+</head>
+<body onload="connect()">
+<div>
+    <h3 id="room-name"></h3>
+    <div id="conversationDiv">
+        <input type="text" id="message" placeholder="Write a message..."/>
+        <button id="sendMessage" onclick="sendMessage();">Send</button>
+        <p id="response"></p>
+    </div>
+</div>
+
+</body>
+</html>

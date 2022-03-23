@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Chatting</title>
+    <script type="text/javascript">
+
+        async function loadRooms(){
+            let nickname = document.getElementById("nickname").value;
+            let chatRooms = await (await fetch("/chat/rooms")).json();
+            chatRooms.forEach((chatRoom) => {
+                let roomDiv = document.getElementById("room-list");
+                roomDiv.innerHTML = `
+                <div>
+                    <a href="/chat/${chatRoom.roomId}/${nickname}">${chatRoom.roomName}</a>
+                </div>
+                `;
+            });
+        }
+
+        async function createRoom() {
+            let nickname = document.getElementById("nickname").value;
+            let roomName = document.getElementById("room-name").value;
+            let response = await (await fetch(`/chat/rooms?room-name=${roomName}`, {
+                method: "POST"
+            })).json();
+            let roomId = response.roomId;
+            window.location.href = `/chat/${roomId}/${nickname}`;
+        }
+    </script>
+</head>
+<body onload="">
+    <div>
+        <div>
+            <input type="text" id="nickname" placeholder="Choose a nickname"/>
+            <button id="connect" onclick="loadRooms()">입장</button>
+            <br><br>
+            <input type="text" id="room-name" placeholder="Create Room">
+            <button id="create" onclick="createRoom()">생성</button>
+        </div>
+        <div id="room-list">
+        </div>
+    </div>
+</body>
+</html>
