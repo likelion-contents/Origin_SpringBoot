@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: test
+logging:
+  level:
+    dev.aquashdw.community.auth.filter: debug
