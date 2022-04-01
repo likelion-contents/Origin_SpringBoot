@@ -1,0 +1,37 @@
+server:
+  port: 8000
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: community-shop
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/shop/**
+          filters:
+            - RewritePath=/api/(?<path>.*), /$\{path}
+            - name: LogExecution
+              args:
+                simpleUid: true
+                inSeconds: true
+        - id: community-user
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - name: RewritePath
+              args:
+                regexp: /api/(?<path>.*)
+                replacement: /$\{path}
+            - LogExecution=true, true
+        - id: community-area
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/area/**
+          filters:
+            - RewritePath=/api/(?<path>.*), /$\{path}
+
+logging:
+  level:
+    dev.aquashdw.gateway.filter: trace
