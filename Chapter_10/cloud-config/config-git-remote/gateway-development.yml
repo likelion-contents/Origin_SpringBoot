@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: community-shop
+        uri: http://localhost:8081
+        predicates:
+        - Path=/api/shop/**
+        filters:
+        - RewritePath=/api/(?<path>.*), /$\{path}
+      - id: community-user
+        uri: http://localhost:8082
+        predicates:
+        - Path=/api/user/**
+        filters:
+        - RewritePath=/api/(?<path>.*), /$\{path}
+      - id: community-area
+        uri: http://localhost:8083
+        predicates:
+        - Path=/api/area/**
+        filters:
+        - RewritePath=/api/(?<path>.*), /$\{path}
+        - LogExecution=false, false

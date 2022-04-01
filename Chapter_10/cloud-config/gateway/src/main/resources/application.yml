@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: gateway
+  profiles:
+    active: development,common
+  config:
+    import: optional:configserver:http://root:asLK1209@localhost:8888

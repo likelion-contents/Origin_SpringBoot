@@ -1,0 +1,14 @@
+server:
+  port: 8000
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: refresh,gateway
+  endpoint:
+    refresh:
+      enabled: true
+    gateway:
+      enabled: true
