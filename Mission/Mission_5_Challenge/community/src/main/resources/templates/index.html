@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Home</title>
+</head>
+<body>
+    <div sec:authorize="isAnonymous()">
+        <h2>Hello! Please, sign in!</h2>
+        <button onclick="location.href = 'http://localhost:8000/request-login?request_from=http://127.0.0.1:8080/home'">로그인</button>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+        <h3>
+            Welcome back, <span sec:authentication="name"></span>!
+        </h3>
+        <form th:action="@{/user/logout}" method="post">
+            <input type="submit" th:value="로그아웃">
+        </form>
+    </div>
+
+</body>
+</html>
