@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Home</title>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    showPosition,
+                    null,
+                    { enableHighAccuracy: false, }
+                );
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            fetch(`/area/get-location-info?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}`)
+                .then(response => response.json())
+                .then(body =>
+                    alert(`Latitude: 00000, Longitude: 00000\n${body.regionPatch}`))
+        }
+
+
+    </script>
+</head>
+<body>
+    <div sec:authorize="isAnonymous()">
+        <h2>Hello! Please, sign in!</h2>
+        <button onclick="location.href = '/user/login'">로그인</button>
+        <button onclick="location.href = '/user/signup'">회원가입</button>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+        <h3>
+            Welcome back, <span sec:authentication="name"></span>!
+        </h3>
+        <form th:action="@{/user/logout}" method="post">
+            <input type="submit" th:value="로그아웃">
+        </form>
+    </div>
+    <div>
+        <button onclick="getLocation()">Get Location</button>
+    </div>
+
+</body>
+</html>
